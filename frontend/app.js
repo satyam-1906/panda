@@ -6,7 +6,7 @@ document.getElementById("extract").addEventListener('click', async () => {
     console.log("The user is currently visiting: " + currentUrl);
 
         // Send the raw HTML content to your local Python backend server
-    fetch('http://127.0.0.1:8000/get-transcript', {
+    fetch('http://127.0.0.1:8001/get-transcript', {
         method: 'POST',
         headers: { 
             'Content-Type': 'application/json' 
