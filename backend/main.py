@@ -3,6 +3,7 @@ from datetime import datetime, timedelta, timezone
 from fastapi.middleware.cors import CORSMiddleware
 from bs4 import BeautifulSoup
 from youtube_transcript_api import YouTubeTranscriptApi
+from youtube_transcript_api.proxies import WebshareProxyConfig
 import extractor
 import rag
 import requests
@@ -50,7 +51,11 @@ def health():
 
 @app.post("/read")
 async def check_and_add(payload: Request):
-    yt_api = YouTubeTranscriptApi()
+    yt_api = YouTubeTranscriptApi(
+        proxy_config=WebshareProxyConfig(
+            proxy_username=os.getenv("PROXY_USERNAME", ''),
+            proxy_password=os.getenv("PROXY_PASSWORD",'')
+        ))
     data = await payload.json()
     vidId = data['url'][data['url'].index('v=')+2:data['url'].index('v=')+13]
     user = data['email']
@@ -95,7 +100,11 @@ async def check_and_add(payload: Request):
 
 @app.post("/search")
 async def search_topic(payload: Request):
-    yt_api = YouTubeTranscriptApi()
+    yt_api = YouTubeTranscriptApi(
+        proxy_config=WebshareProxyConfig(
+            proxy_username=os.getenv("PROXY_USERNAME", ''),
+            proxy_password=os.getenv("PROXY_PASSWORD",'')
+        ))
     data = await payload.json()
     vidId = data['url'][data['url'].index('v=')+2:data['url'].index('v=')+13]
     user = data['email']
