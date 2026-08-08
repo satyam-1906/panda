@@ -34,7 +34,7 @@ document.getElementById("read").addEventListener('click', async () => {
         console.log("The user is currently visiting: " + currentUrl);
 
         try {
-            const response = await fetch('https://panda-2s7m.onrender.com/read', {
+            const response = await fetch('https://confident-refinish-amid.ngrok-free.dev/read', {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ document.getElementById("search").addEventListener('click', async () => {
         let currentUrl = tabs[0].url; 
         console.log("The user is currently visiting: " + currentUrl);
 
-        fetch('https://panda-2s7m.onrender.com/search', {
+        fetch('https://confident-refinish-amid.ngrok-free.dev/search', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

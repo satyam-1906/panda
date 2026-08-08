@@ -10,7 +10,7 @@
  * Login / Register buttons open log_n_reg.html in a new Chrome tab.
  */
 
-const BACKEND = 'https://panda-2s7m.onrender.com';
+const BACKEND = 'https://confident-refinish-amid.ngrok-free.dev';
 
 document.addEventListener('DOMContentLoaded', () => {
     const checkingEl  = document.getElementById('checking');
