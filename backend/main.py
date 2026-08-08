@@ -163,7 +163,6 @@ async def search_topic(payload: Request):
         redis_client.set(user+':'+str(yt)+':unfound', json.dumps(dic_unfound), ex=600)
     df = pd.DataFrame(dic)
     print(df)
-    df.to_csv('output/search_output.csv')
 
     return {"status": "successful", "data_found": dic, "data_unfound": dic_unfound}
 

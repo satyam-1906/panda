@@ -11,4 +11,3 @@ redis==8.1.0
 Requests==2.34.2
 supabase==2.31.0
 youtube_transcript_api==1.2.4
-threading
