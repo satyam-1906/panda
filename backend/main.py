@@ -29,8 +29,6 @@ app.add_middleware(CORSMiddleware,
 
 redis_client = redis.Redis(host=os.getenv('REDIS_HOST', 'localhost'), port=int(os.getenv('REDIS_PORT', 6379)), password=os.getenv('REDIS_PASSWORD'), decode_responses=True)
 
-keepalive.ping()
-
 def get_video_title(video_id):
     url = f"https://noembed.com/embed?url=https://www.youtube.com/watch?v={video_id}"
     response = requests.get(url).json()
@@ -259,3 +257,5 @@ def auto_login(request: Request):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="session invalid"
         )
+
+keepalive.ping()
