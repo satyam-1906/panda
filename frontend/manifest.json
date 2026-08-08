@@ -2,11 +2,21 @@
     "manifest_version": 3,
     "name": "Panda",
     "version": "1.0",
-    "icons": {"16": "assets/panda.png"},
+    "icons": {
+        "16": "assets/panda.png",
+        "32": "assets/panda.png",
+        "48": "assets/panda.png",
+        "128": "assets/panda.png"
+    },
     "permissions": ["activeTab", "scripting", "tabs", "storage"],
     "action": {
         "default_popup": "index.html",
-        "default_icon": "assets/panda.png"
+        "default_icon": {
+            "16": "assets/panda.png",
+            "32": "assets/panda.png",
+            "48": "assets/panda.png",
+            "128": "assets/panda.png"
+        }
     },
     "web_accessible_resources": [
         {

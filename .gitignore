@@ -1,3 +1,5 @@
 rag_mem
 .env
 __pycache__
+*.crx
+*.pem
