@@ -34,7 +34,7 @@ document.getElementById("read").addEventListener('click', async () => {
         console.log("The user is currently visiting: " + currentUrl);
 
         try {
-            const response = await fetch('http://127.0.0.1:8001/read', {
+            const response = await fetch('https://panda-jx86.onrender.com/read', {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ document.getElementById("search").addEventListener('click', async () => {
         let currentUrl = tabs[0].url; 
         console.log("The user is currently visiting: " + currentUrl);
 
-        fetch('http://127.0.0.1:8001/search', {
+        fetch('https://panda-jx86.onrender.com/search', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -8,7 +8,7 @@
  *   up the stored token and skip the login screen automatically.
  */
 
-const BACKEND = 'http://127.0.0.1:8001';
+const BACKEND = 'https://panda-jx86.onrender.com';
 
 // ── Tab switching ─────────────────────────────────────────────────────────────
 const tabLogin    = document.getElementById('tab-login');
