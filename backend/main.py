@@ -14,6 +14,7 @@ from dotenv import load_dotenv
 import os
 import database
 import schema
+import keepalive
 from schema import RegSchema, LoginSchema
 import jwt
 load_dotenv()
@@ -28,6 +29,8 @@ app.add_middleware(CORSMiddleware,
                    allow_headers = ['*'])
 
 redis_client = redis.Redis(host=os.getenv('REDIS_HOST', 'localhost'), port=int(os.getenv('REDIS_PORT', 6379)), password=os.getenv('REDIS_PASSWORD'), decode_responses=True)
+
+keepalive.ping()
 
 def get_video_title(video_id):
     url = f"https://noembed.com/embed?url=https://www.youtube.com/watch?v={video_id}"
