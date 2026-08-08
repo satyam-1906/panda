@@ -10,7 +10,7 @@
  * Login / Register buttons open log_n_reg.html in a new Chrome tab.
  */
 
-const BACKEND = 'https://panda-jx86.onrender.com';
+const BACKEND = 'https://panda-2s7m.onrender.com';
 
 document.addEventListener('DOMContentLoaded', () => {
     const checkingEl  = document.getElementById('checking');
