@@ -1,0 +1,14 @@
+beautifulsoup4==4.15.0
+chromadb==1.5.9
+fastapi==0.141.1
+pandas==3.0.5
+protobuf==7.35.1
+pydantic==2.13.4
+PyJWT==2.13.0
+python-dotenv==1.2.2
+pytubefix==10.11.0
+redis==8.1.0
+Requests==2.34.2
+supabase==2.31.0
+youtube_transcript_api==1.2.4
+threading

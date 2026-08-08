@@ -3,15 +3,15 @@
     "name": "Panda",
     "version": "1.0",
     "icons": {"16": "assets/panda.png"},
-    "permissions": ["activeTab", "scripting"],
-    "content_scripts": [
-        {
-            "matches": ["<all_urls>"],
-            "js": ["app.js"]
-        }
-    ],
+    "permissions": ["activeTab", "scripting", "tabs", "storage"],
     "action": {
-        "default_popup": "popup.html",
+        "default_popup": "index.html",
         "default_icon": "assets/panda.png"
-    }
+    },
+    "web_accessible_resources": [
+        {
+            "resources": ["popup.html", "log_n_reg.html"],
+            "matches": ["<all_urls>"]
+        }
+    ]
 }
