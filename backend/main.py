@@ -1,9 +1,7 @@
 from fastapi import FastAPI, Request, Response, HTTPException, status
 from datetime import datetime, timedelta, timezone
 from fastapi.middleware.cors import CORSMiddleware
-from bs4 import BeautifulSoup
 from youtube_transcript_api import YouTubeTranscriptApi
-from youtube_transcript_api.proxies import GenericProxyConfig
 import extractor
 import rag
 import requests
@@ -51,11 +49,7 @@ def health():
 
 @app.post("/read")
 async def check_and_add(payload: Request):
-    yt_api = YouTubeTranscriptApi(
-        proxy_config=GenericProxyConfig(
-            http_url='http://95.211.64.139:8889',
-            https_url='https://113.53.190.184:8080'
-        ))
+    yt_api = YouTubeTranscriptApi()
     data = await payload.json()
     vidId = data['url'][data['url'].index('v=')+2:data['url'].index('v=')+13]
     user = data['email']
@@ -100,11 +94,7 @@ async def check_and_add(payload: Request):
 
 @app.post("/search")
 async def search_topic(payload: Request):
-    yt_api = YouTubeTranscriptApi(
-        proxy_config=GenericProxyConfig(
-            http_url='http://95.211.64.139:8889',
-            https_url='https://113.53.190.184:8080'
-        ))
+    yt_api = YouTubeTranscriptApi()
     data = await payload.json()
     vidId = data['url'][data['url'].index('v=')+2:data['url'].index('v=')+13]
     user = data['email']
