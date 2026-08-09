@@ -122,7 +122,7 @@ async def search_topic(payload: Request):
     ex_doc = json.loads(extractor.get_contextual_analysis(res, payload.headers['Schema']) or '')
     #print(ex_doc)
     keywords = ex_doc['keywords']
-    data = [chapter['summary'] for chapter in ex_doc['chapters_list']]
+    data = [chapter['name']+':'+chapter['summary'] for chapter in ex_doc['chapters_list']]
     time_start = [chapter['start'] for chapter in ex_doc['chapters_list']]
     time_end = [chapter['end'] for chapter in ex_doc['chapters_list']]
     #print(data)
