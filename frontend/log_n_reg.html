@@ -15,16 +15,18 @@
     }
 
     :root {
-      --charcoal: #212224;
-      --cream: #FAF8F5;
-      --sage: #799872;
-      --ochre: #E2954C;
+      --charcoal: #1A1A1A;
+      --cream: #E8E8E6;
+      --sage: #588157;
+      --ochre: #BCB8B1;
     }
 
     body {
       min-height: 100vh;
       font-family: "Inter", "Segoe UI", sans-serif;
-      background-color: var(--cream);
+      background: linear-gradient(-45deg, var(--cream), #DFDFDC, #F0F0EE, var(--cream));
+      background-size: 400% 400%;
+      animation: bg-shift 15s ease infinite;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -50,14 +52,14 @@
       height: 380px;
       top: -80px;
       left: -80px;
-      background: radial-gradient(circle, rgba(121, 152, 114, 0.65) 0%, rgba(250, 248, 245, 0) 70%);
+      background: radial-gradient(circle, rgba(88, 129, 87, 0.65) 0%, rgba(232, 232, 230, 0) 70%);
     }
     body::after {
       width: 350px;
       height: 350px;
       bottom: -60px;
       right: -60px;
-      background: radial-gradient(circle, rgba(226, 149, 76, 0.55) 0%, rgba(250, 248, 245, 0) 70%);
+      background: radial-gradient(circle, rgba(188, 184, 177, 0.65) 0%, rgba(232, 232, 230, 0) 70%);
       animation-delay: -7s;
     }
     @keyframes fluid-mesh {
@@ -75,6 +77,18 @@
       }
     }
 
+    @keyframes bg-shift {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
     /* Refractive Liquid Glass Card */
     .card {
       position: relative;
@@ -88,9 +102,9 @@
       -webkit-backdrop-filter: blur(30px) saturate(120%);
       box-shadow:
         inset 0 1px 1px rgba(255, 255, 255, 0.95),
-        inset 0 -1px 2px rgba(33, 34, 36, 0.06),
-        0 2px 4px rgba(33, 34, 36, 0.03),
-        0 24px 64px rgba(33, 34, 36, 0.1);
+        inset 0 -1px 2px rgba(26, 26, 26, 0.06),
+        0 2px 4px rgba(26, 26, 26, 0.03),
+        0 24px 64px rgba(26, 26, 26, 0.1);
       display: flex;
       flex-direction: column;
       gap: 24px;
@@ -121,7 +135,7 @@
       border: 1px solid rgba(255, 255, 255, 0.7);
       box-shadow:
         inset 0 1px 1px rgba(255, 255, 255, 0.9),
-        0 4px 12px rgba(121, 152, 114, 0.12);
+        0 4px 12px rgba(88, 129, 87, 0.12);
       display: grid;
       place-items: center;
       transition: transform 400ms cubic-bezier(0.25, 1, 0.5, 1);
@@ -139,14 +153,14 @@
     }
     .brand-text p {
       font-size: 0.72rem;
-      color: rgba(33, 34, 36, 0.65);
+      color: rgba(26, 26, 26, 0.6);
       margin-top: 1px;
     }
 
     /* Tab switcher */
     .tabs {
       display: flex;
-      background: rgba(33, 34, 36, 0.04);
+      background: rgba(26, 26, 26, 0.04);
       border: 1px solid rgba(255, 255, 255, 0.5);
       border-radius: 12px;
       padding: 4px;
@@ -160,7 +174,7 @@
       padding: 8px 12px;
       font-size: 0.82rem;
       font-weight: 600;
-      color: rgba(33, 34, 36, 0.6);
+      color: rgba(26, 26, 26, 0.6);
       cursor: pointer;
       border-radius: 8px;
       transition: all 400ms cubic-bezier(0.25, 1, 0.5, 1);
@@ -172,15 +186,15 @@
       color: var(--charcoal);
       box-shadow:
         inset 0 1px 1px rgba(255, 255, 255, 0.85),
-        0 2px 8px rgba(33, 34, 36, 0.06);
+        0 2px 8px rgba(26, 26, 26, 0.06);
     }
     #tab-login.active  {
-      background: rgba(121, 152, 114, 0.3);
-      border: 1px solid rgba(121, 152, 114, 0.2);
+      background: rgba(88, 129, 87, 0.28);
+      border: 1px solid rgba(88, 129, 87, 0.2);
     }
     #tab-register.active {
-      background: rgba(226, 149, 76, 0.25);
-      border: 1px solid rgba(226, 149, 76, 0.2);
+      background: rgba(188, 184, 177, 0.3);
+      border: 1px solid rgba(188, 184, 177, 0.2);
     }
 
     /* Form panels */
@@ -196,7 +210,7 @@
     .field label {
       font-size: 0.73rem;
       font-weight: 700;
-      color: rgba(33, 34, 36, 0.75);
+      color: rgba(26, 26, 26, 0.7);
       letter-spacing: 0.04em;
       text-transform: uppercase;
     }
@@ -215,19 +229,19 @@
       -webkit-backdrop-filter: blur(10px);
       box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.8);
     }
-    .field input::placeholder { color: rgba(33, 34, 36, 0.35); }
+    .field input::placeholder { color: rgba(26, 26, 26, 0.35); }
     .field input:focus {
-      border-color: rgba(121, 152, 114, 0.7);
+      border-color: rgba(88, 129, 87, 0.7);
       background: rgba(255, 255, 255, 0.45);
       box-shadow:
         inset 0 1px 1px rgba(255, 255, 255, 0.9),
-        0 0 0 3px rgba(121, 152, 114, 0.25);
+        0 0 0 3px rgba(88, 129, 87, 0.25);
     }
     #panel-register .field input:focus {
-      border-color: rgba(226, 149, 76, 0.7);
+      border-color: rgba(188, 184, 177, 0.7);
       box-shadow:
         inset 0 1px 1px rgba(255, 255, 255, 0.9),
-        0 0 0 3px rgba(226, 149, 76, 0.2);
+        0 0 0 3px rgba(188, 184, 177, 0.2);
     }
 
     /* Submit button */
@@ -269,33 +283,33 @@
     .submit-btn:disabled { opacity: 0.55; cursor: default; transform: none; }
 
     #btn-do-login {
-      background: rgba(121, 152, 114, 0.22);
-      border: 1px solid rgba(121, 152, 114, 0.5);
+      background: rgba(88, 129, 87, 0.2);
+      border: 1px solid rgba(88, 129, 87, 0.5);
       box-shadow:
         inset 0 1px 2px rgba(255, 255, 255, 0.95),
-        0 6px 18px rgba(121, 152, 114, 0.2);
+        0 6px 18px rgba(88, 129, 87, 0.2);
     }
     #btn-do-login:hover {
-      background: rgba(121, 152, 114, 0.35);
-      border-color: rgba(121, 152, 114, 0.75);
+      background: rgba(88, 129, 87, 0.32);
+      border-color: rgba(88, 129, 87, 0.75);
       box-shadow:
         inset 0 1px 2px rgba(255, 255, 255, 0.95),
-        0 10px 24px rgba(121, 152, 114, 0.35);
+        0 10px 24px rgba(88, 129, 87, 0.35);
     }
 
     #btn-do-register {
-      background: rgba(226, 149, 76, 0.2);
-      border: 1px solid rgba(226, 149, 76, 0.5);
+      background: rgba(188, 184, 177, 0.22);
+      border: 1px solid rgba(188, 184, 177, 0.5);
       box-shadow:
         inset 0 1px 2px rgba(255, 255, 255, 0.95),
-        0 6px 18px rgba(226, 149, 76, 0.18);
+        0 6px 18px rgba(188, 184, 177, 0.18);
     }
     #btn-do-register:hover {
-      background: rgba(226, 149, 76, 0.32);
-      border-color: rgba(226, 149, 76, 0.7);
+      background: rgba(188, 184, 177, 0.35);
+      border-color: rgba(188, 184, 177, 0.7);
       box-shadow:
         inset 0 1px 2px rgba(255, 255, 255, 0.95),
-        0 10px 24px rgba(226, 149, 76, 0.25);
+        0 10px 24px rgba(188, 184, 177, 0.25);
     }
 
     /* Inline loader on button */
