@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="referrer" content="origin" />
+  <meta http-equiv="Permissions-Policy" content="compute-pressure=()" />
+  <title>Lazy Panda — My Library</title>
+  <meta name="description" content="Browse your personal video learning library — all the YouTube videos you've read with Lazy Panda, with AI-extracted topics and key concepts." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Reset & Base ──────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-600:  #588157;
+      --green-500:  #6a9a6a;
+      --green-200:  rgba(88, 129, 87, 0.18);
+      --green-glow: rgba(88, 129, 87, 0.28);
+      --sand-200:   rgba(188, 184, 177, 0.22);
+      --sand-600:   #bcb8b1;
+      --ink:        #1a1a1a;
+      --ink-60:     rgba(26, 26, 26, 0.60);
+      --ink-30:     rgba(26, 26, 26, 0.30);
+      --ink-10:     rgba(26, 26, 26, 0.10);
+      --white-90:   rgba(255, 255, 255, 0.90);
+      --white-50:   rgba(255, 255, 255, 0.50);
+      --white-30:   rgba(255, 255, 255, 0.30);
+      --surface:    rgba(255, 255, 255, 0.55);
+      --radius-lg:  20px;
+      --radius-md:  14px;
+      --radius-sm:  10px;
+      --shadow-card: 0 2px 6px rgba(26,26,26,0.04), 0 12px 32px rgba(26,26,26,0.09);
+      --transition: 380ms cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    html, body {
+      min-height: 100%;
+      font-family: "Inter", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: linear-gradient(-45deg, #e8e8e6, #dce8da, #f0f0ee, #e4ece3);
+      background-size: 400% 400%;
+      animation: bg-shift 18s ease infinite;
+    }
+
+    @keyframes bg-shift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Animated mesh blobs */
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      opacity: 0.55;
+      mix-blend-mode: multiply;
+      animation: fluid 18s ease-in-out infinite alternate;
+      z-index: 0;
+    }
+    body::before {
+      width: 520px; height: 520px;
+      top: -120px; left: -120px;
+      background: radial-gradient(circle, rgba(88,129,87,0.55) 0%, transparent 70%);
+    }
+    body::after {
+      width: 480px; height: 480px;
+      bottom: -120px; right: -120px;
+      background: radial-gradient(circle, rgba(188,184,177,0.55) 0%, transparent 70%);
+      animation-delay: -9s;
+    }
+    @keyframes fluid {
+      0%   { transform: translate(0,0) rotate(0deg) scale(1); }
+      50%  { transform: translate(40px,-30px) rotate(180deg) scale(1.15); }
+      100% { transform: translate(-25px,35px) rotate(360deg) scale(0.9); }
+    }
+
+    /* ─── Layout ─────────────────────────────────────────────────────────────── */
+    .page-wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+
+    /* ─── Header ─────────────────────────────────────────────────────────────── */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-wrap {
+      width: 46px; height: 46px;
+      border-radius: 13px;
+      background: var(--surface);
+      border: 1px solid var(--white-90);
+      backdrop-filter: blur(20px);
+      box-shadow: inset 0 1px 1px var(--white-90), 0 4px 14px var(--green-glow);
+      display: grid; place-items: center;
+    }
+    .logo-wrap img { width: 28px; height: 28px; object-fit: contain; }
+
+    .brand-text h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+    .brand-text p {
+      font-size: 0.72rem;
+      color: var(--ink-60);
+      letter-spacing: 0.03em;
+      margin-top: 1px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Glass pill badge */
+    .count-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 50px;
+      background: var(--green-200);
+      border: 1px solid rgba(88,129,87,0.35);
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--green-600);
+      backdrop-filter: blur(10px);
+      letter-spacing: 0.02em;
+    }
+    .count-badge .dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--green-600);
+      animation: pulse 2.2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.45; transform: scale(0.75); }
+    }
+
+    .btn-icon {
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 16px;
+      border: none; cursor: pointer; border-radius: var(--radius-sm);
+      font-family: inherit; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.03em; color: var(--ink-60);
+      background: var(--surface);
+      border: 1px solid var(--white-90);
+      backdrop-filter: blur(16px);
+      box-shadow: inset 0 1px 1px var(--white-90), 0 3px 8px var(--ink-10);
+      transition: var(--transition);
+    }
+    .btn-icon:hover {
+      color: var(--ink);
+      transform: translateY(-2px);
+      box-shadow: inset 0 1px 1px var(--white-90), 0 6px 16px var(--ink-10);
+    }
+    .btn-icon svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+    /* ─── Search Bar ─────────────────────────────────────────────────────────── */
+    .search-wrap {
+      position: relative;
+      margin-bottom: 24px;
+    }
+    .search-wrap svg {
+      position: absolute; left: 16px; top: 50%;
+      transform: translateY(-50%);
+      width: 16px; height: 16px;
+      color: var(--ink-60); pointer-events: none;
+    }
+    #search-input {
+      width: 100%;
+      padding: 13px 16px 13px 44px;
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      border: 1px solid var(--white-90);
+      backdrop-filter: blur(20px);
+      box-shadow: inset 0 1px 2px var(--white-90), 0 4px 14px var(--ink-10);
+      font-family: inherit; font-size: 0.88rem; color: var(--ink);
+      outline: none; transition: var(--transition);
+    }
+    #search-input::placeholder { color: var(--ink-60); }
+    #search-input:focus {
+      border-color: rgba(88,129,87,0.5);
+      box-shadow: inset 0 1px 2px var(--white-90), 0 0 0 3px var(--green-200), 0 4px 14px var(--ink-10);
+    }
+
+    /* ─── States ─────────────────────────────────────────────────────────────── */
+    .state-wrapper {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 16px;
+      padding: 80px 20px; text-align: center;
+    }
+    .state-icon { font-size: 3rem; line-height: 1; }
+    .state-title { font-size: 1.1rem; font-weight: 600; color: var(--ink); }
+    .state-sub { font-size: 0.82rem; color: var(--ink-60); max-width: 340px; line-height: 1.6; }
+
+    .spinner {
+      width: 32px; height: 32px;
+      border: 3px solid var(--ink-10);
+      border-top-color: var(--green-600);
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── Video Grid ─────────────────────────────────────────────────────────── */
+    #video-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* ─── Video Card ─────────────────────────────────────────────────────────── */
+    .video-card {
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      border: 1px solid var(--white-90);
+      backdrop-filter: blur(28px) saturate(120%);
+      box-shadow: var(--shadow-card), inset 0 1px 1px var(--white-90);
+      overflow: hidden;
+      transition: box-shadow var(--transition), transform var(--transition);
+    }
+    .video-card::before {
+      content: "";
+      display: block; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent);
+    }
+    .video-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 18px rgba(26,26,26,0.08), 0 22px 48px rgba(26,26,26,0.12),
+                  inset 0 1px 1px var(--white-90);
+    }
+
+    .card-summary {
+      display: flex; align-items: center; gap: 16px;
+      padding: 16px 20px;
+      cursor: pointer; user-select: none;
+    }
+
+    /* Thumbnail */
+    .thumb-wrap {
+      position: relative; flex-shrink: 0;
+      width: 128px; height: 72px;
+      border-radius: var(--radius-sm);
+      overflow: hidden; background: #000;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.18);
+    }
+    .thumb-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 500ms ease, filter 300ms ease;
+    }
+    .video-card:hover .thumb-wrap img { transform: scale(1.06); filter: brightness(0.88); }
+    .thumb-play {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0;
+      background: rgba(0,0,0,0.35);
+      transition: opacity 300ms ease;
+    }
+    .video-card:hover .thumb-play { opacity: 1; }
+    .thumb-play svg { width: 28px; height: 28px; color: #fff; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5)); }
+
+    /* Meta */
+    .card-meta { flex: 1; min-width: 0; }
+    .video-title {
+      font-size: 0.95rem; font-weight: 600; line-height: 1.35;
+      margin-bottom: 6px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .topic-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+    .chip {
+      display: inline-block; padding: 2px 9px; border-radius: 50px;
+      font-size: 0.66rem; font-weight: 600; letter-spacing: 0.03em;
+      background: var(--green-200); border: 1px solid rgba(88,129,87,0.25);
+      color: var(--green-600); white-space: nowrap;
+    }
+    .chip-more {
+      background: var(--sand-200); border-color: rgba(188,184,177,0.35); color: var(--ink-60);
+    }
+
+    /* Chevron */
+    .card-chevron {
+      flex-shrink: 0; width: 28px; height: 28px;
+      border-radius: 50%; background: var(--white-50);
+      border: 1px solid var(--white-90);
+      display: grid; place-items: center; color: var(--ink-60);
+      transition: transform var(--transition), background var(--transition);
+    }
+    .card-chevron svg { width: 13px; height: 13px; }
+    .video-card.open .card-chevron {
+      transform: rotate(180deg);
+      background: var(--green-200); color: var(--green-600);
+    }
+
+    /* ─── Expanded body ──────────────────────────────────────────────────────── */
+    .card-body {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      border-top: 1px solid transparent;
+      transition: max-height 400ms cubic-bezier(0.25, 1, 0.5, 1),
+                  opacity 300ms ease,
+                  border-color 400ms ease;
+    }
+    .video-card.open .card-body {
+      max-height: 600px;
+      opacity: 1;
+      border-top-color: var(--ink-10);
+    }
+
+    .body-inner { padding: 20px; display: flex; gap: 20px; }
+
+    /* Expanded thumbnail panel */
+    .yt-embed-wrap {
+      flex-shrink: 0;
+      width: 272px;
+      aspect-ratio: 16/9;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: #000;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+      position: relative;
+    }
+    .yt-embed-wrap img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .yt-external-link {
+      position: relative; display: block; width: 100%; height: 100%; text-decoration: none;
+    }
+    .yt-external-link::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, transparent, rgba(0,0,0,0.55));
+    }
+    .yt-watch-label {
+      position: absolute; left: 12px; right: 12px; bottom: 10px;
+      z-index: 1; font-size: 0.72rem; font-weight: 700; color: #fff;
+      background: rgba(26,26,26,0.78); border-radius: 999px; padding: 5px 10px; text-align: center;
+    }
+
+    /* Topics panel */
+    .topics-panel {
+      flex: 1; min-width: 0;
+      display: flex; flex-direction: column; gap: 8px;
+      height: 220px; max-height: 220px; overflow-y: auto; padding-right: 6px;
+    }
+    .topics-panel::-webkit-scrollbar { width: 5px; }
+    .topics-panel::-webkit-scrollbar-track { background: transparent; }
+    .topics-panel::-webkit-scrollbar-thumb { background: var(--ink-30); border-radius: 4px; }
+    .topics-panel::-webkit-scrollbar-thumb:hover { background: var(--ink-60); }
+
+    .topic-row {
+      border-radius: var(--radius-sm);
+      background: rgba(255,255,255,0.45);
+      border: 1px solid var(--white-90);
+      overflow: hidden; transition: box-shadow 200ms ease;
+      flex-shrink: 0;
+    }
+    .topic-row:hover { box-shadow: 0 2px 10px var(--ink-10); }
+    .topic-row-header {
+      display: flex; align-items: center; gap: 8px;
+      padding: 9px 12px; cursor: pointer; user-select: none;
+    }
+    .topic-num {
+      flex-shrink: 0; width: 20px; height: 20px;
+      border-radius: 6px; background: var(--green-200);
+      border: 1px solid rgba(88,129,87,0.2);
+      display: grid; place-items: center;
+      font-size: 0.62rem; font-weight: 700; color: var(--green-600);
+    }
+    .topic-name {
+      flex: 1; min-width: 0; font-size: 0.8rem; font-weight: 600;
+      white-space: normal; word-break: break-word; line-height: 1.35;
+    }
+    .topic-chevron {
+      width: 16px; height: 16px; color: var(--ink-60);
+      transition: transform 280ms ease; flex-shrink: 0;
+    }
+    .topic-row.open .topic-chevron { transform: rotate(180deg); }
+
+    .topic-desc {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 300ms cubic-bezier(0.25, 1, 0.5, 1), opacity 250ms ease;
+    }
+    .topic-desc-inner {
+      padding: 0 12px 10px 40px;
+      font-size: 0.76rem; line-height: 1.65; color: var(--ink-60);
+      max-height: 120px; overflow-y: auto;
+    }
+    .topic-row.open .topic-desc {
+      max-height: 200px;
+      opacity: 1;
+    }
+
+    /* ─── Responsive ─────────────────────────────────────────────────────────── */
+    @media (max-width: 640px) {
+      .body-inner { flex-direction: column; }
+      .yt-embed-wrap { width: 100%; }
+      .header { flex-wrap: wrap; }
+      .brand-text h1 { font-size: 1.05rem; }
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <div class="page-wrap">
+
+    <!-- ── Header ── -->
+    <header class="header">
+      <div class="brand">
+        <div class="logo-wrap" aria-label="Lazy Panda logo">
+          <img src="assets/panda.png" alt="Lazy Panda" />
+        </div>
+        <div class="brand-text">
+          <h1>My Library</h1>
+          <p>Lazy Panda — your AI video companion</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <div class="count-badge" id="count-badge" aria-live="polite">
+          <span class="dot"></span>
+          <span id="count-label">Loading…</span>
+        </div>
+        <button class="btn-icon" id="btn-back" title="Go back">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 3L5 8l5 5"/>
+          </svg>
+          Back
+        </button>
+      </div>
+    </header>
+
+    <!-- ── Search ── -->
+    <div class="search-wrap">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="6.5" cy="6.5" r="4.5"/>
+        <path d="M10.5 10.5L14 14"/>
+      </svg>
+      <input type="search" id="search-input" placeholder="Search videos or topics…" autocomplete="off" aria-label="Search videos or topics" />
+    </div>
+
+    <!-- ── Loading state ── -->
+    <div id="state-loading" class="state-wrapper">
+      <div class="spinner"></div>
+      <p class="state-title">Loading your library…</p>
+      <p class="state-sub">Fetching your watched videos and AI-extracted topics.</p>
+    </div>
+
+    <!-- ── Error state ── -->
+    <div id="state-error" class="state-wrapper hidden">
+      <div class="state-icon">⚠️</div>
+      <p class="state-title">Couldn't load library</p>
+      <p class="state-sub" id="error-msg">Please check your connection and try again.</p>
+    </div>
+
+    <!-- ── Empty state ── -->
+    <div id="state-empty" class="state-wrapper hidden">
+      <div class="state-icon">🐼</div>
+      <p class="state-title">Your library is empty</p>
+      <p class="state-sub">Open a YouTube video and click <strong>Read</strong> in the Lazy Panda extension to start building your library.</p>
+    </div>
+
+    <!-- ── Video list ── -->
+    <div id="video-list" role="list" class="hidden"></div>
+
+  </div><!-- .page-wrap -->
+
+
+
+  <script src="library.js"></script>
+</body>
+</html>

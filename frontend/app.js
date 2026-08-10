@@ -198,6 +198,18 @@ document.getElementById("search").addEventListener('click', async () => {
     }); 
 });
 
+// Library page navigation logic
+const libraryBtn = document.getElementById("library-btn");
+if (libraryBtn) {
+    libraryBtn.addEventListener('click', () => {
+        if (typeof chrome !== 'undefined' && chrome.tabs && chrome.tabs.create) {
+            chrome.tabs.create({ url: chrome.runtime.getURL('library.html') });
+        } else {
+            window.location.href = 'library.html';
+        }
+    });
+}
+
 // Logout logic
 document.getElementById("logout-btn").addEventListener('click', () => {
     localStorage.removeItem('email');
@@ -205,3 +217,4 @@ document.getElementById("logout-btn").addEventListener('click', () => {
         window.location.href = 'index.html';
     });
 });
+

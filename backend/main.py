@@ -64,6 +64,9 @@ async def check_and_add(payload: Request):
 
     cache_string = redis_client.get(user+':'+str(yt))
     cache_string_unfound = redis_client.get(user+':'+str(yt)+':unfound')
+    cache_dash = redis_client.get(f'{user}:get_all_data')
+    if cache_dash:
+        redis_client.delete(f'{user}:get_all_data')
     if cache_string:
         redis_client.delete(user+':'+yt)
     if cache_string_unfound:
@@ -218,7 +221,7 @@ def login(payload: LoginSchema, response: Response):
             max_age=max_age
         )
         # Also return token in body so extension can store it in chrome.storage.local
-        return {"success": True, "message": "Login successful", "token": token}
+        return {"success": True, "message": "Login successful", "token": token, "email": payload.email}
         
     raise HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -243,8 +246,8 @@ def auto_login(request: Request):
 
     try:
         payload = jwt.decode(jwt=token, key=os.getenv("SALT", ''), algorithms=[str(os.getenv("ALGORITHM"))])
-        username: str = payload.get("sub", '')
-        return {"logged_in": True, "user": username}
+        email: str = payload.get("sub", '')
+        return {"logged_in": True, "user": email}
 
     except jwt.ExpiredSignatureError:
         raise HTTPException(
@@ -257,5 +260,27 @@ def auto_login(request: Request):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="session invalid"
         )
+
+@app.post("/dashboard")
+async def get_user_data(payload: Request):
+    data = await payload.json()
+    user = data['email']
+    res = rag.get_all_data(user)
+    dic = {}
+
+    cache_string = redis_client.get(f'{user}:get_all_data')
+    if cache_string:
+        cache_dict = json.loads(cache_string)
+        return {"status": "successful", "data": cache_dict}
+
+    for metadata in res['metadatas'] or []:
+        dic[f'{metadata['video_id']}'] = {'topic': [], 'description': []}
+    for id, document, metadata in zip(res['ids'], res['documents'] or [], res['metadatas'] or []):
+        dic[f'{metadata['video_id']}']['topic'].append(id)
+        dic[f'{metadata['video_id']}']['description'].append(document)
+
+    redis_client.set(f'{user}:get_all_data', json.dumps(dic), 600)
+
+    return {"status": "successful", "data": dic}
 
 keepalive.ping()

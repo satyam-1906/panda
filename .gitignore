@@ -3,3 +3,4 @@ rag_mem
 __pycache__
 *.crx
 *.pem
+test.py
