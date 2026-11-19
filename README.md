@@ -56,6 +56,8 @@ When learning from long video lectures, tutorials, or conference talks on YouTub
 
 ## 🏗 How It Works (Architecture)
 
+[![Architecture diagram](https://gitdiagram.com/diagram-badge.svg)](https://gitdiagram.com/satyam-1906/panda?utm_source=readme&utm_medium=badge)
+
 ### 1. Ingestion Pipeline ("Read")
 ```mermaid
 sequenceDiagram
